@@ -1,0 +1,1127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"><title> Report</title><style type="text/css">
+					body {font-family:VERDANA;color:#161617}
+					img {margin-right:5px;}
+					img.expandCollapseAll{width:26px; height:28px; border-style:none; cursor:pointer;}
+					img.expandCollapse{border-style:none; cursor:pointer}
+					table.uutTable{min-width: 30%; width: auto;font-size: 70%;}
+					table.uutTable td, th, tr{white-space:nowrap;padding:0.5em;vertical-align:text-top}
+					table.batchTable{width:80%;font-size: 70%;border-width:0.13em;border-style:solid;border-color:#D3D5D6;border-collapse:collapse;}
+					table.batchTable td, th, tr{border-width:1px;border-style:solid;border-color:#D3D5D6;white-space:normal;padding:0.5em;vertical-align:text-top;border-collapse:collapse;}
+					table.uutHrefTable{width:80%;font-size: 70%;border-width:0.13em;border-color:#D3D5D6;border-collapse:collapse;border-style:solid;}
+					table.uutHrefTable td, th, tr{border-width:0.13em;border-color:silver;border-collapse:collapse;border-style:solid;padding:0.5em;text-align:center;}
+					table.stepTable{width:auto;max-width:95%;font-size:70%;border-width:0.13em;border-color:#D3D5D6;border-collapse:collapse;border-style:solid;}
+					table.stepTable td, th, tr{width:auto;border-width:0.13em;border-color:#D3D5D6;border-collapse:collapse;border-style:solid;padding:0.5em;text-align:left;}					
+					hr.headerSeparator{text-align:left;height:0px;width:90%;margin-left:0px;border: none; border-bottom: 1px solid #D3D5D6}
+					hr.uutSeparator{text-align:left;height:0px;width:90%;margin-left:0px;color:#D3D5D6; border: none; border-bottom: 1px solid rgb(174, 176, 179)}
+					hr.batchSeparator{text-align:center;height:1px;width:90%;}
+					table.criticalFailureTable{width:50%;font-size: 70%;border-width:1px;border-style:solid;border-color:#D3D5D6;border-collapse:collapse;}
+					table.criticalFailureTable td, th{border-width:1px;border-style:solid;border-color:#D3D5D6;border-collapse:collapse;white-space:nowrap;padding:0.4em;vertical-align:text-top;}
+					table.criticalFailureTable td {text-align:left;}
+					table.criticalFailureTable th {text-align:center;}
+					span.stepText{font-size:94%;}
+					tr.hidden{display:none;}
+					img{margin:0px;padding:0px;}
+					</style><script type="text/javascript">
+					//		
+					var gStylesheetpath = "";	
+					/** A function to initialize the global variable with the stylesheet path**/	
+					setStylesheetPath = function(path)
+					{
+						gStylesheetpath = path;
+					}	
+					/** A function to return the image path depending on whether the file was packed using the XMLPack utility.
+					**/	
+					getImageAbsolutePath = function(imageFileName)
+					{
+						var path ="";	
+						path = gStylesheetpath +  imageFileName;
+						return path;	
+					}
+
+					var gExpandCollapseState = "collapsed";
+
+					/** An array cache of all divs in HTML body, this will calculate all expand collapse divs once and 
+					 store in this global array so that performance is improved for expand/collapse actions from second time**/
+					var gExpandCollapseImagesArray; 
+
+
+					/**Apply Expand/Collapse functionality for image element, this will be called by onClick event of img element
+					**/
+					expandCollapse = function(event)
+					{
+						var imgElem = event.target || event.srcElement;			
+						expandCollapseImageDiv(imgElem);
+					}
+
+					/**Apply Expand/Collapse functionality for div element which contains imgElem
+						imgElem - DOM object of img element
+					**/
+					expandCollapseImageDiv = function(imgElem)
+					{
+						var id = imgElem.className;
+						var expCollDiv = document.getElementById(id);
+						if(expCollDiv)
+						{
+							var imgSrc = imgElem.src;
+							var indexOfLastSlash  = imgSrc.lastIndexOf('/') + 1;
+							var imgPath = imgSrc.slice(0,indexOfLastSlash);
+							var imgName = imgSrc.slice(indexOfLastSlash);
+							if(expCollDiv.className == "expanded")
+							{
+								expCollDiv.className="collapsed";
+								expCollDiv.style.display="none";
+								imgName = imgName.replace("minus","plus");
+							}	
+							else
+							{
+								expCollDiv.className="expanded";
+								expCollDiv.style.display="block";
+								imgName = imgName.replace("plus","minus");
+							}	
+							imgElem.src=imgPath+imgName;
+						}
+					}
+
+					/**Change classname for DIV element, so that it is visible and expanded
+						imgElem - DOM object of img element
+					**/
+					expandImageDiv = function(imgElem)
+					{
+						var id = imgElem.className;
+						var expCollDiv = document.getElementById(id);
+						if(expCollDiv)
+						{
+							var imgSrc = imgElem.src;
+							var indexOfLastSlash  = imgSrc.lastIndexOf('/') + 1;
+							var imgPath = imgSrc.slice(0,indexOfLastSlash);
+							var imgName = imgSrc.slice(indexOfLastSlash);
+							expCollDiv.className="expanded";
+							expCollDiv.style.display="block";
+							imgName = imgName.replace("plus","minus");					
+							imgElem.src=imgPath+imgName;
+						}
+					}
+					/**Change classname for DIV element, so that it is hidden and collapsed
+						imgElem - DOM object of img element
+					**/
+					collapseImageDiv = function(imgElem)
+					{
+						var id = imgElem.className;
+						var expCollDiv = document.getElementById(id);
+						if(expCollDiv)
+						{
+							var imgSrc = imgElem.src;
+							var indexOfLastSlash  = imgSrc.lastIndexOf('/') + 1;
+							var imgPath = imgSrc.slice(0,indexOfLastSlash);
+							var imgName = imgSrc.slice(indexOfLastSlash);
+							expCollDiv.className="collapsed";
+							expCollDiv.style.display="none";
+							imgName = imgName.replace("minus","plus");	
+							imgElem.src=imgPath+imgName;
+						}
+					}
+					/**
+					* @constructor
+					*/
+					ImgCollection = function(imgArray) { this.imgArray= imgArray; 	this.state = "expanded"; };
+					
+					/** A High level expand/collapse function which will expand or collapse all the DIVs in HTML body 
+					**/
+					expandCollapseAll = function(event)
+					{
+						var rootImgElem = event.target || event.srcElement;		
+						var uniqueDivId = 	rootImgElem.className;
+						if(!gExpandCollapseImagesArray)
+						{
+							gExpandCollapseImagesArray =  new Array();
+						}						
+						if(!gExpandCollapseImagesArray[uniqueDivId])
+						{
+							var divElement = document.getElementById(uniqueDivId);						
+							gExpandCollapseImagesArray[uniqueDivId] = new ImgCollection(divElement.getElementsByTagName("img"));
+						}
+						var expandCollapseState = gExpandCollapseImagesArray[uniqueDivId].state;
+						var expandCollapseImagesArray = gExpandCollapseImagesArray[uniqueDivId].imgArray;
+						if (expandCollapseState == "expanded")
+						{
+							for(var i=0; i<expandCollapseImagesArray.length;++i)
+							{
+								var imgElem = expandCollapseImagesArray[i];
+								if (imgElem.className == "trExpanded")
+									collapseTRImg(imgElem);
+								else
+									collapseImageDiv(imgElem);
+							}
+							rootImgElem.src =getImageAbsolutePath("plus.png");
+							collapseImageDiv(rootImgElem);
+							expandCollapseState="collapsed";
+						}
+						else
+						{
+							for(var i=0; i<expandCollapseImagesArray.length;++i)
+							{
+								var imgElem = expandCollapseImagesArray[i];
+								if (imgElem.className == "trExpanded")
+									expandTRImg(imgElem);
+								else
+									expandImageDiv(imgElem);
+							}
+							rootImgElem.src =getImageAbsolutePath("minus.png");
+							expandImageDiv(rootImgElem);
+							expandCollapseState="expanded";
+						}
+						gExpandCollapseImagesArray[uniqueDivId].state = expandCollapseState;
+					}
+					
+					/** A expand function to expand all divisions during PDF Generation
+					**/
+					expandAll = function()
+					{
+						if(!gExpandCollapseImagesArray)
+						{
+							gExpandCollapseImagesArray =  new Array();
+						}
+						
+						var imgElems = document.getElementsByTagName("img");
+						
+						for (var i=0; i<imgElems.length; ++i)
+						{
+							var uniqueDivId = imgElems[i].className;
+							if (uniqueDivId.startsWith("MainSequence_"))
+							{
+								if(!gExpandCollapseImagesArray[uniqueDivId])
+								{
+									var divElement = document.getElementById(uniqueDivId);						
+									gExpandCollapseImagesArray[uniqueDivId] = new ImgCollection(divElement.getElementsByTagName("img"));
+								}
+								
+								var expandCollapseState = imgElems[i].state;
+								var expandCollapseImagesArray = gExpandCollapseImagesArray[uniqueDivId].imgArray;
+								
+								for(var j=0; j<expandCollapseImagesArray.length;++j)
+								{
+									var imgElem = expandCollapseImagesArray[j];
+									if (imgElem.className == "trExpanded")
+										expandTRImg(imgElem);
+									else
+										expandImageDiv(imgElem);
+								}
+								imgElems[i].src =getImageAbsolutePath("minus.png");
+								expandImageDiv(imgElems[i]);
+								expandCollapseState="expanded";
+								imgElems[i].state = expandCollapseState;
+								imgElems[i].alt = "";
+							}
+						}
+					}
+					
+					/** A High level expand function which will expand all the DIVs in HTML body 
+					**/
+					expandAllTables = function(event)
+					{
+						var anchorElement = event.target || event.srcElement;	
+						if (anchorElement)
+						{
+							var anchorHref = anchorElement.href;
+							var uniqueDivId = 	anchorElement.className;
+							var rootImgElem = document.getElementById(uniqueDivId +'img');	
+							if(!gExpandCollapseImagesArray)
+							{
+								gExpandCollapseImagesArray =  new Array();
+							}		
+							if(!gExpandCollapseImagesArray[uniqueDivId])
+							{
+								var divElement = document.getElementById(uniqueDivId);						
+								gExpandCollapseImagesArray[uniqueDivId] = new ImgCollection(divElement.getElementsByTagName("img"));
+							}
+							var expandCollapseImagesArray = gExpandCollapseImagesArray[uniqueDivId].imgArray;
+							for(var i=0; i<expandCollapseImagesArray.length;++i)
+							{
+								var imgElem = expandCollapseImagesArray[i];
+								if (imgElem.className != "trExpanded")
+									expandImageDiv(imgElem);
+							}
+							rootImgElem.src =getImageAbsolutePath("minus.png");
+							expandImageDiv(rootImgElem);		
+							gExpandCollapseImagesArray[uniqueDivId].state = "expanded";
+							window.location.href = anchorHref; 
+						}
+							return false;
+					}	
+
+					expandTable = function(event)
+					{
+						var anchorElement = event.target || event.srcElement;		
+						var anchorHref = anchorElement.href;
+						var indexOfHash = anchorHref.lastIndexOf('#');
+						var id = anchorHref.substring(indexOfHash + 1);
+						var tableElement = document.getElementById(id);
+						var parentElement = tableElement.parentNode;
+						while(parentElement.tagName != "BODY")
+						{
+							if(parentElement.tagName=='DIV' && parentElement.className=='collapsed')
+							{
+								var imgElem = parentElement.parentNode.getElementsByTagName("IMG")[0];
+								var imgSrc = imgElem.src;
+								var indexOfLastSlash  = imgSrc.lastIndexOf('/') + 1;
+								var imgPath = imgSrc.slice(0,indexOfLastSlash);
+								var imgName = imgSrc.slice(indexOfLastSlash);
+								parentElement.className="expanded";
+								imgName = imgName.replace("plus","minus");					
+								imgElem.src=imgPath+imgName;
+							}
+							parentElement = parentElement.parentNode;
+						}
+						window.location.href = anchorHref;
+						return false;
+					}
+					
+				/** Functions to expand collapse tr elements **/
+				var kExpandedState = 1;
+				var kCollapsedState = 0;
+				expandCollapseTR = function(event)
+				{
+					var imgElem = event.target || event.srcElement;			 
+					if (imgElem)
+					{
+						expandCollapseTRImg(imgElem);
+					}
+				}
+				expandCollapseTRImg  = function(imgElem)
+				{
+					var trElem	= imgElem.parentNode.parentNode;
+					if(trElem)
+					{
+						var expCollState = getStateFromTRElement(trElem);
+						if (expCollState == kCollapsedState)
+						{
+							expandNestedRows(trElem);
+							setStateOfTR(trElem, kExpandedState);
+							setImageToMinus(imgElem);
+						}
+						else if (expCollState == kExpandedState)
+						{
+							collapseNestedRows(trElem);
+							setStateOfTR(trElem, kCollapsedState);
+							setImageToPlus(imgElem);
+						}
+					}
+				}
+				expandTRImg  = function(imgElem)
+				{
+					var trElem	= imgElem.parentNode.parentNode;
+					if(trElem)
+					{
+						expandNestedRows(trElem);
+						setStateOfTR(trElem, kExpandedState);
+						setImageToMinus(imgElem)
+					}
+				}
+				collapseTRImg  = function(imgElem)
+				{
+					var trElem	= imgElem.parentNode.parentNode;
+					if(trElem)
+					{
+						collapseNestedRows(trElem);
+						setStateOfTR(trElem, kCollapsedState);
+						setImageToMinus(imgElem);
+					}
+				}
+				getStateFromTRElement = function(trElem)
+				{
+					var className = trElem.className;
+					var state = kExpandedState;
+					var splitData = className.split(' ');
+					if(splitData.length >= 3)
+					{
+						state = parseInt(splitData[2].split(':')[1],10)
+					}
+					return state;
+				}
+				getLevelFromTRElement = function(trElem)
+				{
+					var className = trElem.className;
+					var level = -1;
+					var splitData = className.split(' ');
+					if(splitData.length >= 2)
+					{
+						level = parseInt(splitData[1].split(':')[1],10)
+					}
+					return level;
+				}
+				setVisibiltyOfTR = function(trElem, visibility)
+				{
+					var className = trElem.className;
+					var splitData = className.split(' ');
+					if(splitData.length >= 3)
+					{
+						splitData[0] = visibility;
+						trElem.className = splitData.join(' ');
+					}					
+				}
+				setStateOfTR = function(trElem, state)
+				{
+					var className = trElem.className;
+					var splitData = className.split(' ');
+					if(splitData.length >= 3)
+					{
+						splitData[2] = 'state:' + state;
+						trElem.className = splitData.join(' ');
+					}					
+				}
+				setImageToPlus = function(imgElem)
+				{
+					var imgSrc = imgElem.src;
+					var indexOfLastSlash  = imgSrc.lastIndexOf('/') + 1;
+					var imgPath = imgSrc.slice(0,indexOfLastSlash);
+					var imgName = imgSrc.slice(indexOfLastSlash);
+					imgName = imgName.replace("minus","plus");
+					imgElem.src=imgPath+imgName;
+				}
+				setImageToMinus = function(imgElem)
+				{
+					var imgSrc = imgElem.src;
+					var indexOfLastSlash  = imgSrc.lastIndexOf('/') + 1;
+					var imgPath = imgSrc.slice(0,indexOfLastSlash);
+					var imgName = imgSrc.slice(indexOfLastSlash);
+					imgName = imgName.replace("plus","minus");
+					imgElem.src=imgPath+imgName;
+				}
+				collapseNestedRows = function(trElem)
+				{					
+					var currLevel = getLevelFromTRElement(trElem);
+					trElem = trElem.nextSibling;
+					while (trElem)
+					{
+						if (trElem.nodeName == "TR" || trElem.nodeName == "tr")
+						{
+							var nextLevel = getLevelFromTRElement(trElem);
+							if (nextLevel > currLevel)
+								setVisibiltyOfTR(trElem, "hidden");
+							else
+								break;
+						}
+						trElem =  trElem.nextSibling;
+					}
+				}
+				expandNestedRows = function(trElem)
+				{
+					var currLevel = getLevelFromTRElement(trElem);
+					var makeVisible = true;
+					var level = -1;
+					trElem = trElem.nextSibling;
+					while (trElem)
+					{
+						if (trElem.nodeName == "TR" || trElem.nodeName == "tr")
+						{
+							var nextLevel = getLevelFromTRElement(trElem);
+							if (nextLevel > currLevel)
+							{
+								var state = getStateFromTRElement(trElem);
+								if (makeVisible == true)
+								{
+									if (state == kCollapsedState)
+									{
+										level = nextLevel;
+										makeVisible = false;
+									}
+									setVisibiltyOfTR(trElem, "visible");
+								}
+								else if(nextLevel <= level)
+								{
+									level = -1;
+									makeVisible = true;
+									if (state == kCollapsedState)
+									{
+										level = nextLevel;
+										makeVisible = false;
+									}
+									setVisibiltyOfTR(trElem, "visible");
+								}							 
+							}
+							else
+								break;
+						}
+						trElem = trElem.nextSibling;
+					}
+				}
+				//Perform any initialization in this method and add dynamic event handlers here	
+					init = function(path)
+					{																	
+						setStylesheetPath(path);
+					}
+						//</script>
+<link rel="stylesheet" href="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/TSGraphStyle.css" />
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/GraphDataLayout.js"></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/jquery/dist/jquery.min.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/engineering-flot/lib/jquery.event.drag.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/engineering-flot/lib/jquery.mousewheel.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/engineering-flot/dist/es5/jquery.flot.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/flot-cursors-plugin/dist/es5/jquery.flot.cursors.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/ni-data-types/dist/es5-minified/ni-data-types.min.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/flot-charting-plugin/dist/es5/jquery.flot.charting.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/flot-intensitygraph-plugin/jquery.flot.intensitygraph.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/three/build/three.min.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/flot-glplotter-plugin/jquery.flot.glplotter.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/webcomponents-lite/webcomponents-lite.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/@jqwidgets/jqx-element/source-minified/jqxelement-polyfills.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/@jqwidgets/jqx-element/source-minified/jqxelement.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/ni-webcharts/dist/es5-minified/element.min.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/ni-webcharts/dist/es5-minified/webcharts.min.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/ni-webcharts-legends/dist/es5-minified/webcharts-legends.min.js" ></script>
+<script defer type="text/javascript" src="file:///C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/GraphControl/node_modules/ni-webcharts/dist/es5-minified/element_registration.min.js" ></script>
+</head><body onload=" init('C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/ATML/StyleSheets/');"><h2 style="font-weight:normal;">BATCH REPORT</h2><table class="batchTable"><tr><td style="font-weight:normal;">STATION ID</td><td>RR-LT-WOR485</td></tr><tr><td style="font-weight:normal;">BATCH SERIAL NUMBER</td><td>h</td></tr><tr><td style="font-weight:normal;">DATE</td><td>Wednesday, May 27, 2026</td></tr><tr><td style="font-weight:normal;">TIME</td><td>5:22:48 PM</td></tr><tr><td style="font-weight:normal;">OPERATOR</td><td>administrator</td></tr></table><br><table class="uutHrefTable"><tr style="font-weight:normal;"><td>TEST SOCKET</td><td>UUT SERIAL NUMBER</td><td>UUT RESULT</td></tr><tr><td>0</td><td><a href = "#0-2026-05-27T17:22:48.511" >ugu</a></td><td style="color:">Failed</td></tr></table><br><h2 style="font-weight:normal;">END BATCH REPORT</h2><hr class="batchSeparator"><h2 style="font-weight:normal;">UUT REPORT</h2><a name="0-2026-05-27T17:22:48.511"></a><table class="uutTable"><tr><td style="font-weight:normal;">STATION ID</td><td>RR-LT-WOR485</td></tr><tr><td style="font-weight:normal;">BATCH SERIAL NUMBER</td><td>h</td></tr><tr><td style="font-weight:normal;">TEST SOCKET INDEX</td><td>0</td></tr><tr><td style="font-weight:normal;">SERIAL NUMBER</td><td>ugu</td></tr><tr><td style="font-weight:normal;">DATE</td><td>Wednesday, May 27, 2026</td></tr><tr><td style="font-weight:normal;">TIME</td><td>5:22:48 PM</td></tr><tr><td style="font-weight:normal;">OPERATOR</td><td>administrator</td></tr><tr><td style="font-weight:normal;">EXECUTION TIME</td><td>28.394 seconds						
+						</td></tr><tr><td style="font-weight:normal;">NUMBER OF RESULTS</td><td>214</td></tr><tr><td style="font-weight:normal;">UUT RESULT</td><td style="color:#FF0000;">Failed</td></tr></table><br><br><table class="criticalFailureTable"><tr><th colspan="3">FAILURE CHAIN</th></tr><tr><th>STEP</th><th>SEQUENCE</th><th>SEQUENCE FILE</th></tr><tr><td><a href="#ResultId1244" onclick="expandAllTables(event);" class="IDHRMCO2Z1FSSEBJP2MP50DKWT2CNDXET1NTVHZKPHPQ3KVFF31W5">Voltage Test</a></td><td>Power_OP_Test</td><td>Solar_panel_main.seq</td></tr><tr><td><a href="#ResultId1182" onclick="expandAllTables(event);" class="IDHRMCO2Z1FSSEBJP2MP50DKWT2CNDXET1NTVHZKPHPQ3KVFF31W5">SequenceCall-AC OutPut Test</a></td><td>MainSequence</td><td>Solar_panel_main.seq</td></tr></table><br><hr class="headerSeparator"><span style="font-size:70%;font-weight:normal;"><img onclick="expandCollapseAll(event)" alt="Expand/Collapse" src="C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/ATML/StyleSheets/minus.png" class="MainSequence_IDHRMCO2Z1FSSEBJP2MP50DKWT2CNDXET1NTVHZKPHPQ3KVFF31W5" id="MainSequence_IDHRMCO2Z1FSSEBJP2MP50DKWT2CNDXET1NTVHZKPHPQ3KVFF31W5img"/>
+				Expand / Collapse MainSequence
+				</span><br><br><div class="expanded" id="MainSequence_IDHRMCO2Z1FSSEBJP2MP50DKWT2CNDXET1NTVHZKPHPQ3KVFF31W5"><span style="margin-left:20px;font-size:70%;font-weight:normal;">
+			Begin Sequence: MainSequence
+			</span><br><span style="margin-left:20px;font-size:70%;font-weight:normal;">C:\Users\halstead_rideriver\Documents\TestStand_projects\Solar_Panel Controller\Solar_panel_main.seq</span><br><br><table  class="stepTable" style="margin-left:20px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1036"></a>Checkup msg </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr class="visible level:1 state:1"><td colspan="8" style="font-weight:500;padding-left:15px;">TestResults/Data</td></tr><tr class="visible level:2 state:1"><td style="vertical-align:top;  padding-left:30px;">ButtonHit</td><td colspan="7">1</td></tr><tr class="visible level:2 state:1"><td style="vertical-align:top;  padding-left:30px;">Response</td><td colspan="7">If&nbsp;the&nbsp;unit&nbsp;failed,&nbsp;provide&nbsp;details&nbsp;here.</td></tr><tr><td><a name="ResultId1037"></a>SequenceCall-Temperature Monitor</td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1039"></a>Thermal Test</td><td style="color:#B98028;text-align:center;">Skipped</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1040"></a><img onclick="expandCollapse(event)" alt="Expand/Collapse" src="C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/ATML/StyleSheets/minus.png" class="IDR4Y1U2CBED03BXHL4DBND51KLDM0SWARMQYU3ZD1P2HB1IKFRYIL"/>SequenceCall-SolarPanel Output Test</td><td style="color:#008000;text-align:center;">Passed</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div class="expanded" id="IDR4Y1U2CBED03BXHL4DBND51KLDM0SWARMQYU3ZD1P2HB1IKFRYIL"><span style="margin-left:60px;font-size:70%;font-weight:normal;">Begin Sequence: SolarPanel Output Test</span><br><span style="margin-left:60px;font-size:70%;font-weight:normal;">C:\Users\halstead_rideriver\Documents\TestStand_projects\Solar_Panel Controller\Solar_panel_main.seq</span><br><br><table  class="stepTable" style="margin-left:60px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1041"></a><img onclick="expandCollapse(event)" alt="Expand/Collapse" src="C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/ATML/StyleSheets/minus.png" class="IDXHJDCC1DOGBCOJG2AJKMM3IV4O5GALQKPZRAAOMMQGIL5BYVYPNI"/>Resistance Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">112.975</td><td></td><td></td><td style="text-align:right;">0</td><td style="text-align:right;">118</td><td style="text-align:center;">GELE(>= <=)</td></tr></table><div  class="expanded" id="IDXHJDCC1DOGBCOJG2AJKMM3IV4O5GALQKPZRAAOMMQGIL5BYVYPNI"><br><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1043"></a>Set Ambient Temp </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDDG2CJX5AZI3DJW3OPFV4V5WVWHVBEGUYC5DKA1IQ0CURIHHDOCCE"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1045"></a>Set Light Intensity </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1046"></a>Calculate Expected Voltage </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1047"></a>Panel Output Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">0.94506</td><td></td><td style="text-align:right;">0.95256</td><td style="text-align:right;">0.85256 (Nominal -0.1)</td><td style="text-align:right;">1.05256 (Nominal +0.1)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1050"></a>Set Light Intensity </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1051"></a>Calculate Expected Voltage </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1052"></a>Panel Output Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">5.72386</td><td></td><td style="text-align:right;">5.71536</td><td style="text-align:right;">5.61536 (Nominal -0.1)</td><td style="text-align:right;">5.81536 (Nominal +0.1)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1055"></a>Set Light Intensity </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1056"></a>Calculate Expected Voltage </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1057"></a>Panel Output Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">9.4891</td><td></td><td style="text-align:right;">9.5256</td><td style="text-align:right;">9.4256 (Nominal -0.1)</td><td style="text-align:right;">9.6256 (Nominal +0.1)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr></table></div><br><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1063"></a>Set Ambient Temp </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDBDL5RDK0LX4FKC2UJ1YOFFK54LJDNKZCQYXGMSDMGBGNZPPFMWXL"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1065"></a>Set Light Intensity </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1066"></a>Calculate Expected Voltage </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1067"></a>Panel Output Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">1.153348</td><td></td><td style="text-align:right;">1.114848</td><td style="text-align:right;">1.014848 (Nominal -0.1)</td><td style="text-align:right;">1.214848 (Nominal +0.1)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1070"></a>Set Light Intensity </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1071"></a>Calculate Expected Voltage </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1072"></a>Panel Output Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">6.713588</td><td></td><td style="text-align:right;">6.689088</td><td style="text-align:right;">6.589088 (Nominal -0.1)</td><td style="text-align:right;">6.789088 (Nominal +0.1)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1075"></a>Set Light Intensity </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1076"></a>Calculate Expected Voltage </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1077"></a>Panel Output Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">11.14198</td><td></td><td style="text-align:right;">11.14848</td><td style="text-align:right;">11.04848 (Nominal -0.1)</td><td style="text-align:right;">11.24848 (Nominal +0.1)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr></table></div><br><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1083"></a>Set Ambient Temp </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDQDFQAIUHK52QLCZ152NRSVHW5PMNKDNMI5NICQMCCLPYDM3E4S3K"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1085"></a>Set Light Intensity </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1086"></a>Calculate Expected Voltage </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1087"></a>Panel Output Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">1.121828</td><td></td><td style="text-align:right;">1.091328</td><td style="text-align:right;">0.991328 (Nominal -0.1)</td><td style="text-align:right;">1.191328 (Nominal +0.1)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1090"></a>Set Light Intensity </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1091"></a>Calculate Expected Voltage </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1092"></a>Panel Output Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">6.508468</td><td></td><td style="text-align:right;">6.547968</td><td style="text-align:right;">6.447968 (Nominal -0.1)</td><td style="text-align:right;">6.647968 (Nominal +0.1)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1095"></a>Set Light Intensity </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1096"></a>Calculate Expected Voltage </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1097"></a>Panel Output Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">10.87528</td><td></td><td style="text-align:right;">10.91328</td><td style="text-align:right;">10.81328 (Nominal -0.1)</td><td style="text-align:right;">11.01328 (Nominal +0.1)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr></table><br><span style="margin-left:60px;font-size:70%;font-weight:normal;">End Sequence: SolarPanel Output Test</span><br><br></div ></div ></div><table  class="stepTable" style="margin-left:20px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1104"></a><img onclick="expandCollapse(event)" alt="Expand/Collapse" src="C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/ATML/StyleSheets/minus.png" class="IDUBITMORHTPU4HXCITAZKNXF23HM43FC5CVC2YTLEPV5OIK42IZLM"/>SequenceCall-DC OutPut Test</td><td style="color:#008000;text-align:center;">Passed</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div class="expanded" id="IDUBITMORHTPU4HXCITAZKNXF23HM43FC5CVC2YTLEPV5OIK42IZLM"><span style="margin-left:60px;font-size:70%;font-weight:normal;">Begin Sequence: Power_OP_Test</span><br><span style="margin-left:60px;font-size:70%;font-weight:normal;">C:\Users\halstead_rideriver\Documents\TestStand_projects\Solar_Panel Controller\Solar_panel_main.seq</span><br><br><div ><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1106"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1107"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1112"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1113"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1118"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1119"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1124"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1125"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1130"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1131"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1136"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1137"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="ID25S4V2M45WMPLBZOXXUHHC00YEQSKOWQWE3LPPFZRZB4HLPNBPME"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1139"></a>Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">4.9933</td><td></td><td style="text-align:right;">5</td><td style="text-align:right;">4.95 (Nominal -0.05)</td><td style="text-align:right;">5.05 (Nominal +0.05)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1140"></a>AC_Frequency_test</td><td style="color:#B98028;text-align:center;">Skipped</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1141"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br></div><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1145"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1146"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDA2OXFDCZWZD0KXO40RNY0EM0VGZMZBWXV5VDFZNOJAKDAN5NSTLO"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1148"></a>Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">4.99745</td><td></td><td style="text-align:right;">5</td><td style="text-align:right;">4.95 (Nominal -0.05)</td><td style="text-align:right;">5.05 (Nominal +0.05)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1149"></a>AC_Frequency_test</td><td style="color:#B98028;text-align:center;">Skipped</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1150"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br></div><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1154"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1155"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDHMC1XXSBDYAOHVESZ0TQ2XR50FFKNQX3ZIWDTKPIFSM2014VZBYK"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1157"></a>Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">4.99775</td><td></td><td style="text-align:right;">5</td><td style="text-align:right;">4.95 (Nominal -0.05)</td><td style="text-align:right;">5.05 (Nominal +0.05)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1158"></a>AC_Frequency_test</td><td style="color:#B98028;text-align:center;">Skipped</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1159"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br></div><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1163"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1164"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDDMV31NHNHEGSOMJKBUF0H2TY2HFZXL1PMKMCRTCSDL0ASY3PVTHJ"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1166"></a>Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">4.99495</td><td></td><td style="text-align:right;">5</td><td style="text-align:right;">4.95 (Nominal -0.05)</td><td style="text-align:right;">5.05 (Nominal +0.05)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1167"></a>AC_Frequency_test</td><td style="color:#B98028;text-align:center;">Skipped</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1168"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br></div><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1172"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1173"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDHEZ2SR0IPIB2MDYLWEURRWEDNK0CHSIRBCPKBAIWKPK141B3SH3D"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1175"></a>Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">4.9955</td><td></td><td style="text-align:right;">5</td><td style="text-align:right;">4.95 (Nominal -0.05)</td><td style="text-align:right;">5.05 (Nominal +0.05)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1176"></a>AC_Frequency_test</td><td style="color:#B98028;text-align:center;">Skipped</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1177"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><span style="margin-left:60px;font-size:70%;font-weight:normal;">End Sequence: Power_OP_Test</span><br><br></div ></div ></div><table  class="stepTable" style="margin-left:20px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1182"></a><img onclick="expandCollapse(event)" alt="Expand/Collapse" src="C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/ATML/StyleSheets/minus.png" class="IDHJGFZ0Z1ARVVB2O1QXOZMMNDJBIVOXVXXN3FGXIBHWNTKEDXJ0O"/>SequenceCall-AC OutPut Test</td><td style="color:#FF0000;text-align:center;"><b>Failed</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div class="expanded" id="IDHJGFZ0Z1ARVVB2O1QXOZMMNDJBIVOXVXXN3FGXIBHWNTKEDXJ0O"><span style="margin-left:60px;font-size:70%;font-weight:normal;">Begin Sequence: Power_OP_Test</span><br><span style="margin-left:60px;font-size:70%;font-weight:normal;">C:\Users\halstead_rideriver\Documents\TestStand_projects\Solar_Panel Controller\Solar_panel_main.seq</span><br><br><div ><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1184"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1185"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1190"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1191"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1196"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1197"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1202"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1203"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1208"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1209"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1214"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1215"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDY35AM2Q4CCRHKILBA4SATAJC0DNJRP3NDRM3LTHJYTYDJOASWATF"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1217"></a>Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">0.96</td><td></td><td style="text-align:right;">0</td><td style="text-align:right;">-1.2 (Nominal -1.2)</td><td style="text-align:right;">1.2 (Nominal +1.2)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1218"></a>AC_Frequency_test</td><td style="color:#B98028;text-align:center;">Skipped</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1219"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br></div><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1223"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1224"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="ID4SDL2T3JIY4RHW5OP15H3BSDDEUVAIFT5LLH0GPAWX4PPIEPVHAN"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1226"></a>Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">0.49</td><td></td><td style="text-align:right;">0</td><td style="text-align:right;">-1.2 (Nominal -1.2)</td><td style="text-align:right;">1.2 (Nominal +1.2)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1227"></a>AC_Frequency_test</td><td style="color:#B98028;text-align:center;">Skipped</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1228"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br></div><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1232"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1233"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDFE0GPTGNRNGUDFMYW1WRGYGOWFMNHNR0KTPCJ1HC2S2SDMGSS5I"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1235"></a>Voltage Test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">0.87</td><td></td><td style="text-align:right;">0</td><td style="text-align:right;">-1.2 (Nominal -1.2)</td><td style="text-align:right;">1.2 (Nominal +1.2)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1236"></a>AC_Frequency_test</td><td style="color:#B98028;text-align:center;">Skipped</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1237"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br></div><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1241"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1242"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="IDWEIMPAV5EOCNPJBA0MC5IQ2UQHOXNV2DYT3E3BERG5LEEZQZQC0"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1244"></a>Voltage Test</td><td style="color:#FF0000;text-align:center;"><b>Failed</b></td><td style="text-align:right;">0.24</td><td></td><td style="text-align:right;">120</td><td style="text-align:right;">118.8 (Nominal -1.2)</td><td style="text-align:right;">121.2 (Nominal +1.2)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1245"></a>AC_Frequency_test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">60.00000977313</td><td></td><td style="text-align:right;">60</td><td style="text-align:right;">59.01 (Nominal -0.99)</td><td style="text-align:right;">61.01 (Nominal +1.01)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1246"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br></div><table  class="stepTable" style="margin-left:100px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1250"></a>Voltage Statement </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1251"></a>Lock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div  class="expanded" id="ID2HREDZBYQMGPCLKNMEW0YCIVBKIPJIK1CYD2H0M2VP53ZS5KU2GJ"><table  class="stepTable" style="margin-left:140px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1253"></a>Voltage Test</td><td style="color:#FF0000;text-align:center;">Failed</td><td style="text-align:right;">0.75</td><td></td><td style="text-align:right;">120</td><td style="text-align:right;">118.8 (Nominal -1.2)</td><td style="text-align:right;">121.2 (Nominal +1.2)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1254"></a>AC_Frequency_test</td><td style="color:#008000;text-align:center;">Passed</td><td style="text-align:right;">60.00009508365</td><td></td><td style="text-align:right;">60</td><td style="text-align:right;">59.01 (Nominal -0.99)</td><td style="text-align:right;">61.01 (Nominal +1.01)</td><td style="text-align:center;">
+					EQT(== +/-)
+				</td></tr><tr><td><a name="ResultId1255"></a>Unlock </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><span style="margin-left:60px;font-size:70%;font-weight:normal;">End Sequence: Power_OP_Test</span><br><br></div ></div ></div><table  class="stepTable" style="margin-left:20px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1260"></a>SequenceCall-CloseTempMonitor</td><td style="color:#008000;text-align:center;">Passed</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><a name="ResultId1261"></a><img onclick="expandCollapse(event)" alt="Expand/Collapse" src="C:/Program Files (x86)/National Instruments/TestStand 2026/Components/Models/TestStandModels/ATML/StyleSheets/minus.png" class="IDMHXYXYYKWYMTEULUTADUMZMNLN0RCEJZQCERF1JQ2JEWCY15SP"/>Get Thermal Monitor Results</td><td style="color:#008000;text-align:center;">Passed</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table><br><div class="expanded" id="IDMHXYXYYKWYMTEULUTADUMZMNLN0RCEJZQCERF1JQ2JEWCY15SP"><span style="margin-left:60px;font-size:70%;font-weight:normal;">Begin Sequence: Start Monitor</span><br><span style="margin-left:60px;font-size:70%;font-weight:normal;">C:\Users\halstead_rideriver\Documents\TestStand_projects\Solar_Panel Controller\Code_Modules\Temperature Monitor.seq</span><br><br><table  class="stepTable" style="margin-left:60px;"><tr><td rowspan="2" valign="bottom" style="text-align:center;" width="30%">
+				STEP
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="6%">
+				STATUS
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="10%">
+				MEASUREMENT
+			</td><td rowspan="2" valign="bottom" style="text-align:center;" width="5%">
+				UNITS
+			</td><td colspan="4" style="text-align:center;" width="33%">
+				LIMITS
+			</td></tr><tr><td width="10%" style="text-align:center;">
+				NOMINAL VALUE
+			</td><td width="14%" style="text-align:center;">
+				LOW LIMIT
+			</td><td width="14%" style="text-align:center;">
+				HIGH LIMIT
+			</td><td width="10%" style="text-align:center; white-space:nowrap;">
+				COMPARISON TYPE
+			</td></tr><tr><td><a name="ResultId1038"></a>Monitor Temperature </td><td style="color:#008000;text-align:center;">Done</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr class="visible level:1 state:1"><td colspan="8" style="font-weight:500;padding-left:15px;">TestResults/Data</td></tr><tr class="visible level:2 state:1"><td style="vertical-align:top;  padding-left:30px;">Temperature Data
+						[0..1]
+						
+						[0..224]
+						</td><td colspan="7">
+<ni-cartesian-graph style="background-color: #ffffff; color: #e0e0e0" id="graph0"  value="[[49.2163076936, 49.8353416936, 49.5734426936, 51.3591176936, 50.5138981936, 43.770370364, 44.067982864, 44.258454864, 43.020386864, 42.687060864, 43.948937864, 44.544162864, 46.482405936, 46.696686936, 46.660973436, 48.089513436, 46.530023936, 49.5258246936, 50.1686676936, 51.0019826936, 49.7282011936, 49.6567741936, 50.6329431936, 50.6567521936, 49.0615491936, 51.0376961936, 51.0019826936, 49.9424821936, 50.7043701936, 51.2162636936, 51.2400726936, 50.6567521936, 50.4424711936, 49.6686786936, 49.3829706936, 49.5377291936, 49.4305886936, 50.2639036936, 50.5377071936, 50.3710441936, 49.6091561936, 50.0615271936, 20.613213166, 19.506094666, 20.553690666, 20.887016666, 20.434645666, 26.3496774372, 28.0520209372, 28.0401164372, 34.3360922084, 35.1575027084, 34.7408452084, 35.3122612084, 42.5019411272, 41.7876711272, 41.3710136272, 43.0733571272, 50.2400946936, 50.4543756936, 50.2758081936, 50.6210386936, 51.1091231936, 50.5496116936, 50.8710331936, 50.3829486936, 20.648926666, 21.065584166, 21.458432666, 26.7663349372, 28.0282119372, 26.7306214372, 35.2289297084, 33.9551482084, 35.3836882084, 33.9789572084, 34.8360812084, 34.2884742084, 34.1694292084, 34.3360922084, 33.6813447084, 33.9670527084, 34.7765587084, 33.8718167084, 33.8003897084, 34.0741932084, 34.5027552084, 34.5860867084, 34.3122832084, 34.6218002084, 34.4194237084, 34.8717947084, 34.9075082084, 35.3717837084, 42.3233736272, 42.2876601272, 41.0734011272, 41.5495811272, 41.3353001272, 42.4781321272], [62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62, 62]]" DataLayout="''" DataOrientation="''">
+<ni-cartesian-axis show show-ticks show-minor-ticks grid-lines axis-position="bottom"></ni-cartesian-axis>
+<ni-cartesian-axis show show-ticks show-minor-ticks grid-lines axis-position="left" auto-scale="exact"></ni-cartesian-axis>
+<ni-cartesian-plot show label="Plot 0"  >
+<ni-cartesian-plot-renderer line-width="1" line-stroke="#862323"></ni-cartesian-plot-renderer>
+</ni-cartesian-plot>
+</ni-cartesian-graph>
+</td></tr></table><br><span style="margin-left:60px;font-size:70%;font-weight:normal;">End Sequence: Start Monitor</span><br><br></div><br><span style="margin-left:20px;font-size:70%;font-weight:normal;">
+							
+			End Sequence: MainSequence
+			</span></div><h2 style="font-weight:normal;">END UUT REPORT</h2><hr class="uutSeparator"><script type="text/javascript">
+					try {
+						window.cefQuery({
+							request: 'Expand',
+							onSuccess: function(response) {
+							  expandAll();
+							},
+							onFailure: function(error_code, error_message) {expandAll();}
+						});
+						expandAll();
+					}
+					catch (err) {
+						// Do nothing
+					}
+				</script></body></html>
